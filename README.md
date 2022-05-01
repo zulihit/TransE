@@ -2,14 +2,11 @@
 
 本仓库为个人学习所用，大量借鉴了
 https://github.com/Anery/transE
-该代码库的作者在
-https://github.com/Anery/transE
-基础上进一步提高了训练的速度
 建议了解transe的基本思想和代码以后，不必深究本代码每一处的实现细节，后续以基于pytorch的更系统的kge代码进行学习，例如
 https://github.com/DeepGraphLearning/KnowledgeGraphEmbedding
 https://github.com/TimDettmers/ConvE
 
-## 感谢原代码作者的贡献，本代码整体易于理解，适合初学者学习，我在上述代码中加入了一些根据自己理解的注释，基本没有修改原作者的代码，后续会将transe的相关学习记录保存下来
+## 感谢原代码作者的贡献，本代码整体易于理解，适合初学者学习，我在上述代码中加入了一些自己理解的注释，基本没有修改原作者的代码，后续会将相关学习记录保存下来
 	
 ### 文件结构说明
 1. 训练和测试的代码放在src文件夹下
