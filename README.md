@@ -1,5 +1,11 @@
 # transE
-## 本仓库为个人学习所用，大量借鉴了https://github.com/Anery/transE，该代码库的作者在https://github.com/Anery/transE的基础上进一步提高了训练的速度
+## 本仓库为个人学习所用，大量借鉴了
+
+https://github.com/Anery/transE
+该代码库的作者在
+https://github.com/Anery/transE
+基础上进一步提高了训练的速度
+
 ## 整体代码易于理解，适合初学者学习，我在上述代码中加入了一些根据自己理解的注释
 	
 ### 文件结构说明
