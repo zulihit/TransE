@@ -6,11 +6,14 @@ https://github.com/Anery/transE
 https://github.com/DeepGraphLearning/KnowledgeGraphEmbedding
 https://github.com/TimDettmers/ConvE
 
-## 感谢原代码作者的贡献，本代码整体易于理解，适合初学者学习，我在上述代码中加入了一些自己理解的注释，基本没有修改原作者的代码，后续会将相关学习记录保存下来
+## 感谢原代码作者的贡献，本代码整体易于理解，适合初学者学习，我在代码中加入了一些自己理解的注释，基本没有修改原作者的代码
 	
 ### 文件结构说明
 1. 训练和测试的代码放在src文件夹下
 2. 训练和测试的结果放在res文件夹下，经过1001个epoch的训练，损失约为14000（其实300个epoch的时候就基本固定了）。
+
+###  运行
+运行时只需要调整输入和保存文件夹的位置，直接运行transe.py即可
 
 #### 关于transE：
 论文原文：[Translating embeddings for modeling multi-relational data](http://papers.nips.cc/paper/5071-translating-embeddings-for-modeling-multi-rela)
