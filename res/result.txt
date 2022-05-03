@@ -1,0 +1,4 @@
+entity hits@10: 0.3098982580284742
+entity meanrank: 256.0675881566251
+relation hits@10: 0.7970408491476358
+relation meanrank: 81.1789541399333
