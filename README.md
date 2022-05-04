@@ -13,7 +13,7 @@ https://github.com/TimDettmers/ConvE
 2. 训练和测试的结果放在res文件夹下，经过1001个epoch的训练，损失约为14000（其实300个epoch的时候就基本固定了）。
 
 ###  运行
-运行时只需要调整输入和保存文件夹的位置，直接运行transe.py即可
+运行时只需要调整输入和保存文件夹的位置，直接运行transe_simple.py即可
 
 #### 关于transE：
 论文原文：[Translating embeddings for modeling multi-relational data](http://papers.nips.cc/paper/5071-translating-embeddings-for-modeling-multi-rela)
