@@ -1,12 +1,12 @@
 # transE
 
-本仓库为个人学习所用，大量借鉴了
+本仓库为个人学习所用，借鉴了
 https://github.com/Anery/transE
 建议了解transe的基本思想和代码以后，不必深究本代码每一处的实现细节，后续以基于pytorch的更系统的kge代码进行学习，例如
 https://github.com/DeepGraphLearning/KnowledgeGraphEmbedding
 https://github.com/TimDettmers/ConvE
 
-## 感谢原代码作者的贡献，本代码整体易于理解，适合初学者学习，我在代码中加入了一些自己理解的注释，基本没有修改原作者的代码
+## 感谢原代码作者的贡献，本代码整体易于理解，适合初学者学习，我在代码中加入了一些自己理解的详细注释
 	
 ### 文件结构说明
 1. 训练和测试的代码放在src文件夹下
@@ -22,12 +22,48 @@ https://github.com/TimDettmers/ConvE
 
 FB15k.
 
-#### 2. 训练transE
+#### 2. 伪代码
 
-- Tbatch更新：在update_embeddings函数中有一个deepcopy操作，目的就是为了批量更新。这是ML中mini-batch SGD的一个通用的训练知识，在实际编码时很容易忽略。
-- 两次更新：update_embeddings函数中，要对correct triplet和corrupted triplet都进行更新。虽然写作$(h,l,t)$和$(h',l,t')$，但两个三元组只有一个entity不同（前面说了，不同时替换头尾实体），所以在每步更新时重叠的实体要更新两次（和更新relation一样），否则就会导致后一次更新覆盖前一次。
-- 关于L1范数的求导方法：参考了[刘知远组实现](https://github.com/thunlp/KB2E)中的实现，是先对L2范数求导，逐元素判断正负，为正赋值为1，负则为-1。
-- 超参选择：对FB15k数据集，epoch选了1000（其实不需要这么大，后面就没什么提高了），nbatches选了400（训练最快），embedding_dim=50, learning_rate=0.01, margin=1。
+![image](https://user-images.githubusercontent.com/68625084/166636446-ee7ae1dc-778a-4270-96f6-679868e6d420.png)
+伪代码的意思是：
+input: 输入模型的参数是训练集的三元组，实体集E，关系集L，margin，向量的维度k
+1：初始化： 对于关系按照1的初始化方式初始化即可
+2：这里进行了L2范数归一化，也就是除以自身的L2范数
+3：同理，也对实体进行了初始化，但是这里没有除以自身的L2范数
+4：训练的循环过程中：
+5：首先对实体进行了L2范数归一化
+6：取一个batch的样本，这里Sbatch代表的是正样本，也就是正确的三元组
+7： 初始化三元组对，应该就是创造一个用于储存的列表
+8，9，10：这里的意思应该是根据Sbatch的正样本替换头实体或者尾实体构造负样本，然后把对应的正样本三元组和负样本三元组放到一起，组成Tbatch
+11：完成正负样本的提取
+12：根据梯度下降更新向量
+13：结束循环
 
- #### 3. 测试
+#### 4. 需要注意的点
+详细见知乎 https://zhuanlan.zhihu.com/p/508508180?
+
+ #### 5. 测试
 - isFit参数：区分raw和filter。filter会非常慢。
+
+#### 6. 结果
+##### 针对FB15k
+训练1000个epochs的loss：因为是使用了累加的loss，所以看起来比较大，最后效果还不错
+epoch: 900  loss: 14122.820245424562
+epoch: 910 loss: 14373.68032895213
+epoch: 920 loss: 14340.662277325615
+epoch: 930 loss: 14373.677382376287
+epoch: 940 loss: 14328.833943474272
+epoch: 950 loss: 14310.58852751293
+epoch: 960 loss: 14262.76358291793
+epoch: 970 loss: 14311.827534107646
+epoch: 980 loss: 14327.824546415322
+epoch: 990 loss: 14146.539213775186
+现在已经修改为了每个batch的平均loss，但是没有再跑一遍，效果是一样的。
+
+
+
+##### 测试结果：
+entity hits@10: 0.3076551945963332
+entity meanrank: 254.52704372704034
+relation hits@10: 0.7906586988539216
+relation meanrank: 81.79988488429179
