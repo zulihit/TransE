@@ -6,8 +6,13 @@ https://github.com/Anery/transE
 
 https://github.com/zqhead/TransE
 
-建议了解transe的基本思想和代码以后，不必深究本代码每一处的实现细节，后续以基于pytorch的更系统的kge代码进行学习，例如
+因为代码比较老，相对更适合新手，建议了解transe的基本思想和代码以后，不必深究本代码每一处的实现细节，后续可以仔细研究其他更先进的kge方法
+
+例如Rotate
+
 https://github.com/DeepGraphLearning/KnowledgeGraphEmbedding
+
+Conve
 
 https://github.com/TimDettmers/ConvE
 
@@ -107,7 +112,7 @@ relation meanrank: 81.79988488429179
 
 torch的训练集、验证集、测试集作者均做了一些修改，其实就是把尾实体和关系的位置调换了一下，保持头实体、关系、尾实体的位置
 
-如果需要这部分修改后的数据可以在https://github.com/zqhead/TransE下载
+如果需要这部分修改后的数据可以在https://github.com/zqhead/TransE  下载
 
 基本思想和numpy版本的是相同的，但是实现同一个功能的方式有些区别，主要使用了一些torch自己的工具，因为用了gpu，相对而言，训练速度很快，供大家参考。
 
