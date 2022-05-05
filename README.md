@@ -35,7 +35,9 @@ FB15k.
 #### 2. 伪代码
 
 ![image](https://user-images.githubusercontent.com/68625084/166636446-ee7ae1dc-778a-4270-96f6-679868e6d420.png)
+
 伪代码的意思是：
+
 input: 输入模型的参数是训练集的三元组，实体集E，关系集L，margin，向量的维度k
 
 1：初始化： 对于关系按照1的初始化方式初始化即可
