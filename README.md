@@ -1,6 +1,7 @@
 # transE
 
 本仓库为个人学习所用，借鉴了
+
 https://github.com/Anery/transE
 
 https://github.com/zqhead/TransE
