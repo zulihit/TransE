@@ -1,3 +1,6 @@
+# 数据集
+FB15K
+
 # TransE的numpy实现和torch实现
 
 本仓库为个人学习所用，借鉴了
