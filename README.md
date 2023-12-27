@@ -6,6 +6,8 @@ https://github.com/Anery/transE
 
 https://github.com/zqhead/TransE
 
+## 若想要利用自己的数据来训练TransE，见TransE-mydataset.rar文件
+
 因为代码比较老，相对更适合新手，建议了解transe的基本思想和代码以后，不必深究本代码每一处的实现细节，后续可以仔细研究其他更先进的kge方法
 
 例如Rotate
