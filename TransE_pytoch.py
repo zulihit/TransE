@@ -11,7 +11,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from torch.autograd import Variable
-import operator  # operator模块输出一系列对应Python内部操作符的函数
+import operator
 
 # 全局变量
 entities2id = {}
@@ -143,7 +143,6 @@ class E(nn.Module):
         self.__data_init()
 
     def __data_init(self):
-        # embedding.weight (Tensor) -形状为(num_embeddings, embedding_dim)的嵌入中可学习的权值
         nn.init.xavier_uniform_(self.ent_embedding.weight.data) # Xavier 初始化
         nn.init.xavier_uniform_(self.rel_embedding.weight.data) # Xavier 初始化
         self.normalization_rel_embedding()
@@ -172,16 +171,11 @@ class E(nn.Module):
             self.rel_embedding.weight.data[i] = torch.from_numpy(np.array(rel_vector[i]))
 
     def distance(self, h, r, t):
-        # 在 tensor 的指定维度操作就是对指定维度包含的元素进行操作，如果想要保持结果的维度不变，设置参数keepdim=True即可
-        # 如 下面sum中 r_norm * h 结果是一个1024 *50的矩阵（2维张量） sum在dim的结果就变成了 1024的向量（1位张量） 如果想和r_norm对应元素两两相乘
-        # 就需要sum的结果也是2维张量 因此需要使用keepdim= True报纸张量的维度不变
-        # 另外关于 dim 等于几表示张量的第几个维度，从0开始计数，可以理解为张量的最开始的第几个左括号，具体可以参考这个https://www.cnblogs.com/flix/p/11262606.html
         head = self.ent_embedding(h)
         rel = self.rel_embedding(r)
         tail = self.ent_embedding(t)
 
         distance = head + rel - tail
-        # dim = -1表示的是维度的最后一维 比如如果一个张量有3维 那么 dim = 2 = -1， dim = 0 = -3
         # self.norm = 1就是一范数    dim=1：指定计算的维度   distance:(9600,50)
         score = torch.norm(distance, p=self.norm, dim=1) # torch.norm返回所给tensor的矩阵范数或向量范数
         return score
@@ -193,7 +187,6 @@ class E(nn.Module):
         tail = self.ent_embedding(t.cuda())
 
         distance = head + rel - tail
-        # dim = -1表示的是维度的最后一维 比如如果一个张量有3维 那么 dim = 2 = -1， dim = 0 = -3
 
         score = torch.norm(distance, p=self.norm, dim=1)
         return score.cpu().detach().numpy()
@@ -219,7 +212,6 @@ class E(nn.Module):
         r_c = torch.squeeze(r_c, dim=1).cuda()
         t_c = torch.squeeze(t_c, dim=1).cuda()
 
-        # torch.nn.embedding类的forward只接受longTensor类型的张量
         # pos:正确（头+关系-尾）的一范数    错误 neg:（头+关系-尾）的一范数
         pos = self.distance(h, r, t)
         neg = self.distance(h_c, r_c, t_c)
@@ -227,8 +219,6 @@ class E(nn.Module):
         entity_embedding = self.ent_embedding(torch.cat([h, t, h_c, t_c]).cuda()) # 实体嵌入
         relation_embedding = self.rel_embedding(torch.cat([r, r_c]).cuda())  # 关系嵌入
 
-        # loss_F = max(0, -y*(x1-x2) + margin)
-        # loss1 = torch.sum(torch.relu(pos - neg + self.margin))
         y = Variable(torch.Tensor([-1])).cuda()
         # loss 计算正负三元组的距离，也就是（r+(d+)-(d-)）
         loss = self.loss_F(pos, neg, y)  # self.loss_F = nn.MarginRankingLoss(self.margin, reduction="mean").cuda()
@@ -336,16 +326,6 @@ class TransE:
                     pr = np.random.random(1)[0]
                     p = relation_tph[int(corrupted_sample[1])] / (
                             relation_tph[int(corrupted_sample[1])] + relation_hpt[int(corrupted_sample[1])])
-                    '''
-                    这里关于p的说明 tph 表示每一个头结对应的平均尾节点数 hpt 表示每一个尾节点对应的平均头结点数
-                    当tph > hpt 时 更倾向于替换头 反之则跟倾向于替换尾实体
-                    
-                    举例说明 
-                    在一个知识图谱中，一共有10个实体 和n个关系，如果其中一个关系使两个头实体对应五个尾实体，
-                    那么这些头实体的平均 tph为2.5，而这些尾实体的平均 hpt只有0.4，
-                    则此时我们更倾向于替换头实体，
-                    因为替换头实体才会有更高概率获得正假三元组，如果替换头实体，获得正假三元组的概率为 8/9 而替换尾实体获得正假三元组的概率只有 5/9
-                    '''
                     if pr < p:
                         # change the head entity
                         corrupted_sample[0] = random.sample(self.entities, 1)[0] # random.sample(self.entities）从entities中随机选择一个
@@ -533,19 +513,6 @@ class TransE:
             distance = self.model.test_distance(head_embedding, norm_relation, tail_embedding)
             for i in range(len(tamp)):
                 rank_tail_dict[tamp[i]] = distance[i]
-
-            # itemgetter 返回一个可调用对象，该对象可以使用操作__getitem__()方法从自身的操作中捕获item
-            # 使用itemgetter()从元组记录中取回特定的字段 搭配sorted可以将dictionary根据value进行排序
-            # sort 是应用在 list 上的方法，sorted 可以对所有可迭代的对象进行排序操作。
-            '''
-
-            sorted(iterable, cmp=None, key=None, reverse=False)
-            参数说明：
-            iterable -- 可迭代对象。
-            cmp -- 比较的函数，这个具有两个参数，参数的值都是从可迭代对象中取出，此函数必须遵守的规则为，大于则返回1，小于则返回-1，等于则返回0。
-            key -- 主要是用来进行比较的元素，只有一个参数，具体的函数的参数就是取自于可迭代对象中，指定可迭代对象中的一个元素来进行排序。
-            reverse -- 排序规则，reverse = True 降序 ， reverse = False 升序（默认）。
-            '''
 
             rank_head_sorted = sorted(rank_head_dict.items(), key=operator.itemgetter(1), reverse=False)
             rank_tail_sorted = sorted(rank_tail_dict.items(), key=operator.itemgetter(1), reverse=False)
