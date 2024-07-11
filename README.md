@@ -1,11 +1,3 @@
-# TransE
-
-本仓库为个人学习所用，借鉴了
-
-https://github.com/Anery/transE
-
-https://github.com/zqhead/TransE
-
 ## 若想要利用自己的数据来训练TransE，见TransE-mydataset.rar文件
 
 因为代码比较老，相对更适合新手，建议了解transe的基本思想和代码以后，不必深究本代码每一处的实现细节，后续可以仔细研究其他更先进的kge方法
@@ -17,8 +9,6 @@ https://github.com/DeepGraphLearning/KnowledgeGraphEmbedding
 Conve
 
 https://github.com/TimDettmers/ConvE
-
-## 感谢原代码作者的贡献，本代码整体易于理解，适合初学者学习，我在代码中加入了一些自己理解的详细注释
 	
 ### 文件结构说明
 1. 训练和测试的代码放在src文件夹下
@@ -109,6 +99,14 @@ entity meanrank: 254.52704372704034
 relation hits@10: 0.7906586988539216
 
 relation meanrank: 81.79988488429179
+
+# 参考
+
+本仓库为个人学习所用，借鉴了
+
+https://github.com/Anery/transE
+
+https://github.com/zqhead/TransE
 
 
 
