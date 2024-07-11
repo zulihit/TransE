@@ -10,7 +10,7 @@ Conve
 
 https://github.com/TimDettmers/ConvE
 
-SelectE(my new paper)
+SelectE
 
 https://github.com/zulihit/SelectE
 	
