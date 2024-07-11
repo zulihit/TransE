@@ -21,7 +21,7 @@ https://github.com/zulihit/SelectE
 ###  To reproduce the results
 Just adjust the location of the DATA and save folders, run transe_simplic.py directly
 
-#### 关于transE：
+#### TransE：
 Paper：[Translating embeddings for modeling multi-relational data](http://papers.nips.cc/paper/5071-translating-embeddings-for-modeling-multi-rela)
 
 #### 1 Train data
