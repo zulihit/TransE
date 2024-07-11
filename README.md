@@ -1,72 +1,74 @@
-## 若想要利用自己的数据来训练TransE，见TransE-mydataset.rar文件
+## If you want to use your own data to train TransE, see the TransE-mydataset.rar file
 
-因为代码比较老，相对更适合新手，建议了解transe的基本思想和代码以后，不必深究本代码每一处的实现细节，后续可以仔细研究其他更先进的kge方法
+Because the code is relatively old and more suitable for beginners, it is recommended that after understanding the basic ideas and code of transE, there is no need to delve into every implementation detail of this code. In the future, other more advanced kge methods can be carefully studied
 
-例如Rotate
+For example, Rotate
 
 https://github.com/DeepGraphLearning/KnowledgeGraphEmbedding
 
 Conve
 
 https://github.com/TimDettmers/ConvE
-	
-### 文件结构说明
-1. 训练和测试的代码放在src文件夹下
-2. 训练和测试的结果放在res文件夹下，经过1001个epoch的训练，损失约为14000（其实300个epoch的时候就基本固定了）。
 
-###  运行
-运行时只需要调整输入和保存文件夹的位置，直接运行transe_simple.py即可
+SelectE(my new paper)
+
+https://github.com/zulihit/SelectE
+	
+### Organization
+1. The code for training and testing is located in the src folder
+2. The results of training and testing are in the res folder. After 1001 epochs of training, the loss is about 14000 (in fact, it is basically fixed at 300 epochs).
+
+###  To reproduce the results
+Just adjust the location of the DATA and save folders, run transe_simplic.py directly
 
 #### 关于transE：
-论文原文：[Translating embeddings for modeling multi-relational data](http://papers.nips.cc/paper/5071-translating-embeddings-for-modeling-multi-rela)
+Paper：[Translating embeddings for modeling multi-relational data](http://papers.nips.cc/paper/5071-translating-embeddings-for-modeling-multi-rela)
 
-#### 1 训练数据
+#### 1 Train data
 
 FB15k.
 
-#### 2. 伪代码
+#### 2. Pseudo code
 
 ![image](https://user-images.githubusercontent.com/68625084/166636446-ee7ae1dc-778a-4270-96f6-679868e6d420.png)
 
-伪代码的意思是：
+The meaning of pseudocode is:
 
-input: 输入模型的参数是训练集的三元组，实体集E，关系集L，margin，向量的维度k
+Input: The parameters of the input model are the triplet of the training set, entity set E, relationship set L, margin, and vector dimension k
 
-1：初始化： 对于关系按照1的初始化方式初始化即可
+1: Initialization: Initialize the relationship according to the initialization method of 1
 
-2：这里进行了L2范数归一化，也就是除以自身的L2范数
+2: L2 norm normalization has been performed here, which means dividing by its own L2 norm
 
-3：同理，也对实体进行了初始化，但是这里没有除以自身的L2范数
+3: Similarly, the entity has also been initialized, but here it is not divided by its own L2 norm
 
-4：训练的循环过程中：
+4: During the training cycle:
 
-5：首先对实体进行了L2范数归一化
+5: Firstly, L2 norm normalization was performed on the entity
 
-6：取一个batch的样本，这里Sbatch代表的是正样本，也就是正确的三元组
+6: Take a batch of samples, where Sbatch represents the positive sample, which is the correct triplet
 
-7： 初始化三元组对，应该就是创造一个用于储存的列表
+7: Initialize triplet pairs by creating a list for storage
 
-8，9，10：这里的意思应该是根据Sbatch的正样本替换头实体或者尾实体构造负样本，然后把对应的正样本三元组和负样本三元组放到一起，组成Tbatch
+8, 9, 10: The meaning here should be to replace the head or tail entity of the Sbatch with positive samples to construct negative samples, and then put the corresponding positive and negative sample triplets together to form Tbatch
 
-11：完成正负样本的提取
+11: Complete the extraction of positive and negative samples
 
-12：根据梯度下降更新向量
+12: Update vectors based on gradient descent
 
-13：结束循环
+13: End cycle
 
-#### 4. 需要注意的点
+#### 4. Key points
 
-详细见知乎 https://zhuanlan.zhihu.com/p/508508180?
+ZHIHU https://zhuanlan.zhihu.com/p/508508180?
 
- #### 5. 测试
+ #### 5. Test
  
-- isFit参数：区分raw和filter。filter会非常慢。
+- isFit：Distinguish between raw and filter. The filter will be very slow.
 
-#### 6. 结果
+#### 6. Results
 
-##### 针对FB15k
-
-训练1000个epochs的loss：因为是使用了累加的loss，所以看起来比较大，最后效果还不错
+##### For FB15k
 
 epoch: 900  loss: 14122.820245424562
 
@@ -88,10 +90,8 @@ epoch: 980 loss: 14327.824546415322
 
 epoch: 990 loss: 14146.539213775186
 
-现在已经修改为了每个batch的平均loss，但是没有再跑一遍，效果是一样的。
 
-
-##### 测试结果：
+##### Results：
 entity hits@10: 0.3076551945963332
 
 entity meanrank: 254.52704372704034
@@ -100,9 +100,9 @@ relation hits@10: 0.7906586988539216
 
 relation meanrank: 81.79988488429179
 
-# 参考
+# Acknowledgement
 
-本仓库为个人学习所用，借鉴了
+This repo benefits from these repos. Thanks for their wonderful works.
 
 https://github.com/Anery/transE
 
@@ -110,7 +110,7 @@ https://github.com/zqhead/TransE
 
 
 
-测试结果：
+Final results：
 
 hits@10: 0.4067393475647949
 
