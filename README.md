@@ -1,117 +1,110 @@
-## If you want to use your own data to train TransE, see the TransE-mydataset.rar file
+# TransE: Personal Reproduction
 
-Because the code is relatively old and more suitable for beginners, it is recommended that after understanding the basic ideas and code of transE, there is no need to delve into every implementation detail of this code. In the future, other more advanced kge methods can be carefully studied
+This repository contains a personal reproduction of the NIPS 2013 paper  
+**[Translating Embeddings for Modeling Multi-relational Data](http://papers.nips.cc/paper/5071-translating-embeddings-for-modeling-multi-rela)**.
 
-For example, Rotate
+---
 
-https://github.com/DeepGraphLearning/KnowledgeGraphEmbedding
+## Notes
+- If you want to train **TransE** on your own dataset, see the `TransE-mydataset.rar` file.  
+- The code is relatively old and designed for beginners. It is recommended to first understand the core ideas and basic implementation of TransE here, but not to spend too much time on every implementation detail.  
+- For further research, you may want to explore more advanced KGE (Knowledge Graph Embedding) methods, such as:  
+  - [RotatE](https://github.com/DeepGraphLearning/KnowledgeGraphEmbedding)  
+  - [ConvE](https://github.com/TimDettmers/ConvE)  
+  - [SelectE](https://github.com/zulihit/SelectE)  
 
-Conve
+---
 
-https://github.com/TimDettmers/ConvE
+## Repository Organization
+1. Training and testing code: `src/`  
+2. Training and testing results: `res/`  
+   - After ~1001 epochs, the loss stabilizes around 14,000 (mostly converged by ~300 epochs).  
 
-SelectE
+---
 
-https://github.com/zulihit/SelectE
-	
-### Organization
-1. The code for training and testing is located in the src folder
-2. The results of training and testing are in the res folder. After 1001 epochs of training, the loss is about 14000 (in fact, it is basically fixed at 300 epochs).
+## Reproducing Results
+1. Set the paths for your **DATA** and **save** folders.  
+2. Run directly:  
 
-###  To reproduce the results
-Just adjust the location of the DATA and save folders, run transe_simplic.py directly
+```bash
+python transe_simplie.py
+```
 
-#### TransE：
-Paper：[Translating embeddings for modeling multi-relational data](http://papers.nips.cc/paper/5071-translating-embeddings-for-modeling-multi-rela)
+---
 
-#### 1 Train data
+## Reference
+- **Paper:** *Translating Embeddings for Modeling Multi-relational Data*  
+- **Dataset:** FB15k  
 
-FB15k.
+---
 
-#### 2. Pseudo code
+## Pseudocode Explanation
 
-![image](https://user-images.githubusercontent.com/68625084/166636446-ee7ae1dc-778a-4270-96f6-679868e6d420.png)
+![Pseudocode](https://user-images.githubusercontent.com/68625084/166636446-ee7ae1dc-778a-4270-96f6-679868e6d420.png)
 
-The meaning of pseudocode is:
+**Inputs:**  
+- Training triplets  
+- Entity set *E*  
+- Relation set *L*  
+- Margin γ  
+- Embedding dimension *k*  
 
-Input: The parameters of the input model are the triplet of the training set, entity set E, relationship set L, margin, and vector dimension k
+**Steps:**  
+1. Initialize relations and entities.  
+2. Apply L2 norm normalization to relations.  
+3. Entities are initialized without L2 normalization at this step.  
+4. Training loop begins:  
+   - Normalize entity vectors by L2 norm.  
+   - Sample a positive batch (*Sbatch*) of correct triplets.  
+   - Construct negative samples by corrupting head/tail entities.  
+   - Form training batch (*Tbatch*) with both positive & negative triplets.  
+   - Update embeddings using gradient descent.  
+5. End training cycle.  
 
-1: Initialization: Initialize the relationship according to the initialization method of 1
+---
 
-2: L2 norm normalization has been performed here, which means dividing by its own L2 norm
+## Key Points
+- [Zhihu article explanation](https://zhuanlan.zhihu.com/p/508508180?)
 
-3: Similarly, the entity has also been initialized, but here it is not divided by its own L2 norm
+---
 
-4: During the training cycle:
+## Testing
+- **isFit**: Choose between `raw` and `filter` evaluation modes.  
+  - Note: `filter` mode is significantly slower.  
 
-5: Firstly, L2 norm normalization was performed on the entity
+---
 
-6: Take a batch of samples, where Sbatch represents the positive sample, which is the correct triplet
+## Example Results (FB15k)
 
-7: Initialize triplet pairs by creating a list for storage
+**Training Loss (sample epochs):**
+```
+epoch: 900  loss: 14122.8202
+epoch: 910  loss: 14373.6803
+epoch: 920  loss: 14340.6623
+epoch: 930  loss: 14373.6773
+epoch: 940  loss: 14328.8339
+epoch: 950  loss: 14310.5885
+epoch: 960  loss: 14262.7636
+epoch: 970  loss: 14311.8275
+epoch: 980  loss: 14327.8245
+epoch: 990  loss: 14146.5392
+```
 
-8, 9, 10: The meaning here should be to replace the head or tail entity of the Sbatch with positive samples to construct negative samples, and then put the corresponding positive and negative sample triplets together to form Tbatch
+**Evaluation Metrics:**
+- Entity hits@10: **0.3077**  
+- Entity mean rank: **254.53**  
+- Relation hits@10: **0.7907**  
+- Relation mean rank: **81.80**  
 
-11: Complete the extraction of positive and negative samples
+**Final Results:**  
+- Hits@10: **0.4067**  
+- Mean Rank: **246.32**  
 
-12: Update vectors based on gradient descent
+---
 
-13: End cycle
+## Acknowledgements
+This repo benefits from the following works:  
+- [Anery/transE](https://github.com/Anery/transE)  
+- [zqhead/TransE](https://github.com/zqhead/TransE)  
 
-#### 4. Key points
-
-ZHIHU https://zhuanlan.zhihu.com/p/508508180?
-
- #### 5. Test
- 
-- isFit：Distinguish between raw and filter. The filter will be very slow.
-
-#### 6. Results
-
-##### For FB15k
-
-epoch: 900  loss: 14122.820245424562
-
-epoch: 910 loss: 14373.68032895213
-
-epoch: 920 loss: 14340.662277325615
-
-epoch: 930 loss: 14373.677382376287
-
-epoch: 940 loss: 14328.833943474272
-
-epoch: 950 loss: 14310.58852751293
-
-epoch: 960 loss: 14262.76358291793
-
-epoch: 970 loss: 14311.827534107646
-
-epoch: 980 loss: 14327.824546415322
-
-epoch: 990 loss: 14146.539213775186
-
-
-##### Results：
-entity hits@10: 0.3076551945963332
-
-entity meanrank: 254.52704372704034
-
-relation hits@10: 0.7906586988539216
-
-relation meanrank: 81.79988488429179
-
-# Acknowledgement
-
-This repo benefits from these repos. Thanks for their wonderful works.
-
-https://github.com/Anery/transE
-
-https://github.com/zqhead/TransE
-
-
-
-Final results：
-
-hits@10: 0.4067393475647949
-
-meanrank: 246.31837111272876
+Thanks to the authors for their contributions.
